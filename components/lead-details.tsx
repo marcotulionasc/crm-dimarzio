@@ -30,8 +30,8 @@ export function LeadDetails({ leadId }: LeadDetailsProps) {
   const [loading, setLoading] = useState(true)
   const [lead, setLead] = useState<Metropole | null>(null)
   const [updatingStatus, setUpdatingStatus] = useState(false)
-  const tenantId = process.env.CRM_TENANT_ID || "6"
-  const product = process.env.CRM_DEFAULT_PRODUCT || "dimarzio-auto"
+  const tenantId = process.env.NEXT_PUBLIC_CRM_TENANT_ID || "6"
+  const product = process.env.NEXT_PUBLIC_CRM_DEFAULT_PRODUCT || "dimarzio-auto"
 
   useEffect(() => {
     fetchLead()
@@ -41,7 +41,7 @@ export function LeadDetails({ leadId }: LeadDetailsProps) {
     setLoading(true)
     try {
       // Buscar todos os leads e filtrar pelo ID (já que a API não tem endpoint individual)
-      const response = await fetch(`${process.env.CRM_API_BASE_URL}/data/${tenantId}/${product}`)
+      const response = await fetch(`${process.env.NEXT_PUBLIC_CRM_API_BASE_URL}/data/${tenantId}/${product}`)
       if (!response.ok) {
         throw new Error("Falha ao buscar dados")
       }
@@ -69,7 +69,7 @@ export function LeadDetails({ leadId }: LeadDetailsProps) {
     if (!lead || !lead.cellPhone) return
     
     const formattedPhone = lead.cellPhone.replace(/\D/g, "")
-    const template = process.env.CRM_WHATSAPP_TEMPLATE || 'Olá {nome}, estamos entrando em contato sobre seu interesse em nossos produtos de seguros.'
+    const template = process.env.NEXT_PUBLIC_CRM_WHATSAPP_TEMPLATE || 'Olá {nome}, estamos entrando em contato sobre seu interesse em nossos produtos de seguros.'
     const message = encodeURIComponent(template.replace('{nome}', lead.name || ""))
     window.open(`https://wa.me/${formattedPhone}?text=${message}`, "_blank")
   }
@@ -77,7 +77,7 @@ export function LeadDetails({ leadId }: LeadDetailsProps) {
   const handleEmailClick = () => {
     if (!lead || !lead.email) return
     
-    const companyName = process.env.CRM_COMPANY_NAME || 'Dimarzio Seguros'
+    const companyName = process.env.NEXT_PUBLIC_CRM_COMPANY_NAME || 'Dimarzio Seguros'
     const subject = encodeURIComponent(`${companyName} - Seu interesse em seguros`)
     const body = encodeURIComponent(`Olá ${lead.name || ""},\n\nEntramos em contato sobre seu interesse em nossos produtos de seguros.\n\nAtenciosamente,\nEquipe ${companyName}`)
     window.open(`mailto:${lead.email}?subject=${subject}&body=${body}`, "_blank")
@@ -88,7 +88,7 @@ export function LeadDetails({ leadId }: LeadDetailsProps) {
     
     setUpdatingStatus(true)
     try {
-      const response = await fetch(`${process.env.CRM_API_BASE_URL}/update/${lead.id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_CRM_API_BASE_URL}/update/${lead.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -292,7 +292,7 @@ export function LeadDetails({ leadId }: LeadDetailsProps) {
               <label className="text-sm font-medium text-gray-600">Produto</label>
               <div className="flex items-center gap-2 mt-1">
                 <Building className="h-4 w-4 text-gray-400" />
-                <span className="text-gray-900">{lead.product || process.env.CRM_COMPANY_NAME || 'Dimarzio Seguros'}</span>
+                <span className="text-gray-900">{lead.product || process.env.NEXT_PUBLIC_CRM_COMPANY_NAME || 'Dimarzio Seguros'}</span>
               </div>
             </div>
           </CardContent>

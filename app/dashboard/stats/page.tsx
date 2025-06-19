@@ -11,7 +11,7 @@ export default function StatsPage() {
   return (
     <DashboardShell>
       <DashboardHeader 
-        heading={`Estatísticas - ${process.env.CRM_COMPANY_NAME || 'Dimarzio Seguros'}`} 
+        heading={`Estatísticas - ${process.env.NEXT_PUBLIC_CRM_COMPANY_NAME || 'Dimarzio Seguros'}`} 
         text="Análise detalhada de métricas e performance dos seus leads." 
       />
       <div className="grid gap-4">

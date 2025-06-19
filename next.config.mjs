@@ -11,11 +11,11 @@ const nextConfig = {
   },
   env: {
     // Configurações do CRM Dimarzio Seguros
-    CRM_TENANT_ID: '6',
-    CRM_COMPANY_NAME: 'Dimarzio Seguros',
-    CRM_API_BASE_URL: 'https://backend-ingressar.onrender.com/metropole/v1',
-    CRM_WHATSAPP_TEMPLATE: 'Olá {nome}, estamos entrando em contato sobre seu interesse em nossos produtos de seguros.',
-    CRM_DEFAULT_PRODUCT: 'dimarzio-auto',
+    NEXT_PUBLIC_CRM_TENANT_ID: '6',
+    NEXT_PUBLIC_CRM_COMPANY_NAME: 'Dimarzio Seguros',
+    NEXT_PUBLIC_CRM_API_BASE_URL: 'https://backend-ingressar.onrender.com/metropole/v1',
+    NEXT_PUBLIC_CRM_WHATSAPP_TEMPLATE: 'Olá {nome}, estamos entrando em contato sobre seu interesse em nossos produtos de seguros.',
+    NEXT_PUBLIC_CRM_DEFAULT_PRODUCT: 'dimarzio-auto',
   },
 }
 

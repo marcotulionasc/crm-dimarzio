@@ -33,7 +33,7 @@ export function LeadList({ onProductChange, onStatusUpdate }: LeadListProps) {
   const [loading, setLoading] = useState(true)
   const [metropoles, setMetropoles] = useState<Metropole[]>([])
   const [updatingId, setUpdatingId] = useState<number | null>(null)
-  const tenantId = process.env.CRM_TENANT_ID || "6"
+  const tenantId = process.env.NEXT_PUBLIC_CRM_TENANT_ID || "6"
   const [product, setProduct] = useState<string>("todos")
   const [searchTerm, setSearchTerm] = useState("")
   const { products } = useProductConfig()
@@ -61,7 +61,7 @@ export function LeadList({ onProductChange, onStatusUpdate }: LeadListProps) {
         
         // Fazer chamadas paralelas para todos os produtos
         const promises = dimarzioProducts.map(productId => 
-          fetch(`${process.env.CRM_API_BASE_URL}/data/${tenantId}/${productId}`)
+          fetch(`${process.env.NEXT_PUBLIC_CRM_API_BASE_URL}/data/${tenantId}/${productId}`)
             .then(res => res.ok ? res.json() : [])
             .catch(() => [])
         )
@@ -70,7 +70,7 @@ export function LeadList({ onProductChange, onStatusUpdate }: LeadListProps) {
         allLeads = results.flat()
       } else {
         // Buscar apenas o produto selecionado
-        const response = await fetch(`${process.env.CRM_API_BASE_URL}/data/${tenantId}/${product}`)
+        const response = await fetch(`${process.env.NEXT_PUBLIC_CRM_API_BASE_URL}/data/${tenantId}/${product}`)
         if (response.ok) {
           allLeads = await response.json()
         }
@@ -93,7 +93,7 @@ export function LeadList({ onProductChange, onStatusUpdate }: LeadListProps) {
 
   const handleWhatsAppClick = (phone: string, name: string) => {
     const formattedPhone = phone.replace(/\D/g, "")
-    const template = process.env.CRM_WHATSAPP_TEMPLATE || 'Olá {nome}, estamos entrando em contato sobre seu interesse em nossos produtos de seguros.'
+    const template = process.env.NEXT_PUBLIC_CRM_WHATSAPP_TEMPLATE || 'Olá {nome}, estamos entrando em contato sobre seu interesse em nossos produtos de seguros.'
     const message = encodeURIComponent(template.replace('{nome}', name))
     window.open(`https://wa.me/${formattedPhone}?text=${message}`, "_blank")
   }
@@ -101,7 +101,7 @@ export function LeadList({ onProductChange, onStatusUpdate }: LeadListProps) {
   const handleUpdateStatus = async (id: number, status: string) => {
     setUpdatingId(id)
     try {
-      const response = await fetch(`${process.env.CRM_API_BASE_URL}/update/${id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_CRM_API_BASE_URL}/update/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -283,7 +283,7 @@ export function LeadList({ onProductChange, onStatusUpdate }: LeadListProps) {
             <div>
               <CardTitle className="text-xl sm:text-2xl font-bold text-gray-900 flex items-center gap-2">
                 <Home className="h-6 w-6" />
-                Leads {process.env.CRM_COMPANY_NAME}
+                Leads {process.env.NEXT_PUBLIC_CRM_COMPANY_NAME}
               </CardTitle>
               <CardDescription className="text-gray-600 text-sm sm:text-base">
                 Gerencie seus leads de seguros e oportunidades de vendas. Ordenado por mais recentes.

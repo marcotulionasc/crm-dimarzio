@@ -104,7 +104,7 @@ export function DashboardNav() {
                 </div>
                 <div>
                   <h2 className="text-lg font-bold text-gray-900">CRM</h2>
-                  <p className="text-xs text-gray-600">{process.env.CRM_COMPANY_NAME || 'Dimarzio Seguros'}</p>
+                  <p className="text-xs text-gray-600">{process.env.NEXT_PUBLIC_CRM_COMPANY_NAME || 'Dimarzio Seguros'}</p>
                 </div>
               </>
             )}

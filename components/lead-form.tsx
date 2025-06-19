@@ -22,7 +22,7 @@ export function LeadForm() {
     name: "",
     email: "",
     cellPhone: "",
-    product: process.env.CRM_DEFAULT_PRODUCT || "dimarzio-auto",
+    product: process.env.NEXT_PUBLIC_CRM_DEFAULT_PRODUCT || "dimarzio-auto",
     interessePrincipal: "seguros",
     field01: "", // Observações gerais
     field02: "", // Como nos conheceu
@@ -33,7 +33,7 @@ export function LeadForm() {
     field07: "", // Campo extra 4
     field08: "", // Campo extra 5
     field09: "", // Campo extra 6
-    tenantId: parseInt(process.env.CRM_TENANT_ID || '6'),
+    tenantId: parseInt(process.env.NEXT_PUBLIC_CRM_TENANT_ID || '6'),
   })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -56,7 +56,7 @@ export function LeadForm() {
       name: "",
       email: "",
       cellPhone: "",
-      product: process.env.CRM_DEFAULT_PRODUCT || "dimarzio-auto",
+      product: process.env.NEXT_PUBLIC_CRM_DEFAULT_PRODUCT || "dimarzio-auto",
       interessePrincipal: "seguros",
       field01: "",
       field02: "",
@@ -67,7 +67,7 @@ export function LeadForm() {
       field07: "",
       field08: "",
       field09: "",
-      tenantId: parseInt(process.env.CRM_TENANT_ID || '6'),
+      tenantId: parseInt(process.env.NEXT_PUBLIC_CRM_TENANT_ID || '6'),
     })
   }
 
@@ -84,7 +84,7 @@ export function LeadForm() {
         },
       }
 
-      const response = await fetch(`${process.env.CRM_API_BASE_URL}/send`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_CRM_API_BASE_URL}/send`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -120,7 +120,7 @@ export function LeadForm() {
     <form onSubmit={handleSubmit}>
       <Card>
         <CardHeader>
-          <CardTitle>Cadastrar Novo Lead - {process.env.CRM_COMPANY_NAME}</CardTitle>
+                          <CardTitle>Cadastrar Novo Lead - {process.env.NEXT_PUBLIC_CRM_COMPANY_NAME}</CardTitle>
           <CardDescription>Preencha os dados do novo lead para o CRM da Dimarzio Seguros.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">

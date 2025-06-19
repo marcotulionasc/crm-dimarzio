@@ -1,34 +1,39 @@
 // Configuração do CRM Dimarzio Seguros
 export const CRM_CONFIG = {
   // Informações da empresa
-  COMPANY_NAME: process.env.CRM_COMPANY_NAME || 'Dimarzio Seguros',
-  TENANT_ID: process.env.CRM_TENANT_ID || '6',
+  COMPANY_NAME: process.env.NEXT_PUBLIC_CRM_COMPANY_NAME || 'Dimarzio Seguros',
+  TENANT_ID: process.env.NEXT_PUBLIC_CRM_TENANT_ID || '6',
   
-  // API
-  API_BASE_URL: process.env.CRM_API_BASE_URL || 'https://backend-ingressar.onrender.com/metropole/v1',
+  // API Configuration
+  API_BASE_URL: process.env.NEXT_PUBLIC_CRM_API_BASE_URL || 'https://backend-ingressar.onrender.com/metropole/v1',
   
   // Produtos disponíveis
-  PRODUCTS: [
-    { id: "dimarzio-consorcio", name: "Consórcio", active: true },
-    { id: "dimarzio-residencial", name: "Residencial", active: true },
-    { id: "dimarzio-fianca-locaticia", name: "Fiança Locatícia", active: true },
-    { id: "dimarzio-auto", name: "Auto", active: true },
-    { id: "dimarzio-fiduciario", name: "Fiduciário", active: true },
-    { id: "dimarzio-contato", name: "Contato", active: true },
-    { id: "dimarzio-vida", name: "Vida", active: true },
-    { id: "dimarzio-portateis", name: "Portáteis", active: true },
-    { id: "dimarzio-saude", name: "Saúde", active: true },
-    { id: "dimarzio-viagem", name: "Viagem", active: true },
-    { id: "dimarzio-rural", name: "Rural", active: true },
-    { id: "dimarzio-empresarial", name: "Empresarial", active: true },
-    { id: "dimarzio-rc-profissional", name: "RC Profissional", active: true },
-  ],
+  PRODUCTS: {
+    'dimarzio-auto': {
+      name: 'Seguro Auto',
+      description: 'Seguro para veículos',
+      color: '#2E0854',
+      icon: 'car'
+    },
+    'dimarzio-residencial': {
+      name: 'Seguro Residencial', 
+      description: 'Seguro para residências',
+      color: '#4B0082',
+      icon: 'home'
+    },
+    'dimarzio-vida': {
+      name: 'Seguro de Vida',
+      description: 'Seguro de vida e acidentes pessoais',
+      color: '#9FCC00',
+      icon: 'heart'
+    }
+  },
   
   // Produto padrão
-  DEFAULT_PRODUCT: process.env.CRM_DEFAULT_PRODUCT || 'dimarzio-auto',
+  DEFAULT_PRODUCT: process.env.NEXT_PUBLIC_CRM_DEFAULT_PRODUCT || 'dimarzio-auto',
   
-  // Templates de mensagens
-  WHATSAPP_TEMPLATE: process.env.CRM_WHATSAPP_TEMPLATE || 'Olá {nome}, estamos entrando em contato sobre seu interesse em nossos produtos de seguros.',
+  // Templates
+  WHATSAPP_TEMPLATE: process.env.NEXT_PUBLIC_CRM_WHATSAPP_TEMPLATE || 'Olá {nome}, estamos entrando em contato sobre seu interesse em nossos produtos de seguros.',
   
   // Status dos leads
   LEAD_STATUS: [

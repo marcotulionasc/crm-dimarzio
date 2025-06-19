@@ -16,7 +16,7 @@ export default function DashboardPage() {
   return (
     <DashboardShell>
       <DashboardHeader 
-        heading={`Dashboard - ${process.env.CRM_COMPANY_NAME || 'Dimarzio Seguros'}`} 
+        heading={`Dashboard - ${process.env.NEXT_PUBLIC_CRM_COMPANY_NAME || 'Dimarzio Seguros'}`} 
         text="Visão geral dos seus leads e controle de vendas." 
       />
       <div className="grid gap-4">

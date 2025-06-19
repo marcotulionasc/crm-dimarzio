@@ -48,8 +48,8 @@ const CHART_TYPES = {
 
 export function LeadStats({ refreshTrigger }: LeadStatsProps) {
   const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 0)
-  const tenantId = process.env.CRM_TENANT_ID || "6"
-  const product = process.env.CRM_DEFAULT_PRODUCT || "dimarzio-auto"
+  const tenantId = process.env.NEXT_PUBLIC_CRM_TENANT_ID || "6"
+  const product = process.env.NEXT_PUBLIC_CRM_DEFAULT_PRODUCT || "dimarzio-auto"
 
   useEffect(() => {
     const handleResize = () => {
@@ -72,7 +72,7 @@ export function LeadStats({ refreshTrigger }: LeadStatsProps) {
   const fetchLeads = async () => {
     setLoading(true)
     try {
-      const response = await fetch(`${process.env.CRM_API_BASE_URL}/data/${tenantId}/${product}`)
+      const response = await fetch(`${process.env.NEXT_PUBLIC_CRM_API_BASE_URL}/data/${tenantId}/${product}`)
       const data = response.ok ? await response.json() : []
       setLeads(data)
     } catch (error) {
@@ -188,7 +188,7 @@ export function LeadStats({ refreshTrigger }: LeadStatsProps) {
           <div className="flex items-center gap-3">
             <Building className="h-6 w-6 text-secondary" />
             <div>
-              <h2 className="text-xl font-bold text-white">{process.env.CRM_COMPANY_NAME || 'Dimarzio Seguros'} - Estatísticas</h2>
+              <h2 className="text-xl font-bold text-white">{process.env.NEXT_PUBLIC_CRM_COMPANY_NAME || 'Dimarzio Seguros'} - Estatísticas</h2>
               <p className="text-white/90 text-sm">Análise completa dos leads de seguros</p>
             </div>
           </div>
@@ -303,7 +303,7 @@ export function LeadStats({ refreshTrigger }: LeadStatsProps) {
             <Card className="border-white/20">
               <CardHeader className="bg-primary text-white p-2 sm:p-3">
                 <CardTitle className="text-base sm:text-lg">
-                  Distribuição por Status - {process.env.CRM_COMPANY_NAME || 'Dimarzio Seguros'}
+                  Distribuição por Status - {process.env.NEXT_PUBLIC_CRM_COMPANY_NAME || 'Dimarzio Seguros'}
                 </CardTitle>
                 <CardDescription className="text-white/80 text-xs sm:text-sm">
                   Visualização do funil de vendas de seguros

@@ -10,7 +10,7 @@ import { Toaster } from "@/components/toaster"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata = {
-  title: `${process.env.CRM_COMPANY_NAME || 'Dimarzio Seguros'} CRM`,
+  title: `${process.env.NEXT_PUBLIC_CRM_COMPANY_NAME || 'Dimarzio Seguros'} CRM`,
   description: "Sistema de gestão de leads e vendas especializado em seguros",
   generator: 'v0.dev'
 }

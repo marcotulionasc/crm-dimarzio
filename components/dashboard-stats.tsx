@@ -14,8 +14,8 @@ interface DashboardStatsProps {
 export function DashboardStats({ refreshTrigger }: DashboardStatsProps) {
   const [leads, setLeads] = useState<Metropole[]>([])
   const [loading, setLoading] = useState(true)
-  const tenantId = process.env.CRM_TENANT_ID || "6"
-  const [product, setProduct] = useState<string>(process.env.CRM_DEFAULT_PRODUCT || "dimarzio-auto")
+  const tenantId = process.env.NEXT_PUBLIC_CRM_TENANT_ID || "6"
+  const [product, setProduct] = useState<string>(process.env.NEXT_PUBLIC_CRM_DEFAULT_PRODUCT || "dimarzio-auto")
   const { products } = useProductConfig()
 
   useEffect(() => {
@@ -25,7 +25,7 @@ export function DashboardStats({ refreshTrigger }: DashboardStatsProps) {
   const fetchLeads = async () => {
     setLoading(true)
     try {
-      const response = await fetch(`${process.env.CRM_API_BASE_URL}/data/${tenantId}/${product}`)
+      const response = await fetch(`${process.env.NEXT_PUBLIC_CRM_API_BASE_URL}/data/${tenantId}/${product}`)
       const data = response.ok ? await response.json() : []
       setLeads(data)
     } catch (error) {
