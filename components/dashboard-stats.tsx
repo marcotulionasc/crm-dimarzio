@@ -26,72 +26,44 @@ export function DashboardStats({ refreshTrigger }: DashboardStatsProps) {
     try {
       console.log("🔍 DashboardStats: Iniciando busca de leads...")
       
-      // Buscar dados de todos os produtos
-      const productIds = [
-        "dimarzio-auto",
-        "dimarzio-residencial", 
-        "dimarzio-vida",
-        "dimarzio-consorcio",
-        "dimarzio-fianca-locaticia",
-        "dimarzio-fiduciario",
-        "dimarzio-contato",
-        "dimarzio-portateis",
-        "dimarzio-saude",
-        "dimarzio-viagem",
-        "dimarzio-rural",
-        "dimarzio-empresarial",
-        "dimarzio-rc-profissional"
-      ]
-
-      let allLeads: Metropole[] = []
-      let successCount = 0
-      let errorCount = 0
-
-      for (const productId of productIds) {
-        try {
-          const url = `${process.env.NEXT_PUBLIC_CRM_API_BASE_URL}/data/${tenantId}/${productId}`
-          console.log(`📡 Buscando: ${productId}`)
-          
-          const response = await fetch(url)
-          if (response.ok) {
-            const data = await response.json()
-            if (Array.isArray(data) && data.length > 0) {
-              console.log(`✅ ${productId}: ${data.length} leads encontrados`)
-              // Adicionar informação do produto aos leads
-              const leadsWithProduct = data.map(lead => ({
-                ...lead,
-                product: productId
-              }))
-              allLeads = [...allLeads, ...leadsWithProduct]
-              successCount++
-            } else {
-              console.log(`⚪ ${productId}: sem leads`)
-            }
-          } else {
-            console.log(`❌ ${productId}: erro HTTP ${response.status}`)
-            errorCount++
-          }
-        } catch (error) {
-          console.error(`💥 Erro ao buscar ${productId}:`, error)
-          errorCount++
+      // Buscar apenas no produto "dimarzioseguros"
+      const url = `${process.env.NEXT_PUBLIC_CRM_API_BASE_URL}/data/${tenantId}/dimarzioseguros`
+      console.log(`📡 Buscando: dimarzioseguros`)
+      
+      const response = await fetch(url)
+      let data: any[] = []
+      
+      if (response.ok) {
+        data = await response.json()
+        if (Array.isArray(data)) {
+          console.log(`✅ dimarzioseguros: ${data.length} leads encontrados`)
+          // Garantir que todos os leads têm o produto definido
+          const leadsWithProduct = data.map(lead => ({
+            ...lead,
+            product: "dimarzioseguros"
+          }))
+          setLeads(leadsWithProduct)
+        } else {
+          console.log(`⚪ dimarzioseguros: sem leads`)
+          setLeads([])
         }
+      } else {
+        console.log(`❌ dimarzioseguros: erro HTTP ${response.status}`)
+        setLeads([])
       }
 
       console.log(`📊 Resultado final:`)
-      console.log(`   Total de leads: ${allLeads.length}`)
-      console.log(`   Produtos com sucesso: ${successCount}`)
-      console.log(`   Produtos com erro: ${errorCount}`)
+      console.log(`   Total de leads: ${data?.length || 0}`)
       console.log(`   Leads por status:`, {
-        total: allLeads.length,
-        novo: allLeads.filter(l => !l.field03 || l.field03 === "NOVO").length,
-        qualificado: allLeads.filter(l => l.field03 === "QUALIFICADO" || l.field03 === "QUALIFICADO_OP").length,
-        proposta: allLeads.filter(l => l.field03 === "PROPOSTA").length,
-        fechado: allLeads.filter(l => l.field03 === "FECHADO").length
+        total: data?.length || 0,
+        novo: data?.filter((l: any) => !l.field03 || l.field03 === "NOVO").length || 0,
+        qualificado: data?.filter((l: any) => l.field03 === "QUALIFICADO" || l.field03 === "QUALIFICADO_OP").length || 0,
+        proposta: data?.filter((l: any) => l.field03 === "PROPOSTA").length || 0,
+        fechado: data?.filter((l: any) => l.field03 === "FECHADO").length || 0
       })
       
-      setLeads(allLeads)
     } catch (error) {
-      console.error("💥 Erro geral ao buscar dados:", error)
+      console.error("💥 Erro ao buscar dados:", error)
       setLeads([])
     } finally {
       setLoading(false)

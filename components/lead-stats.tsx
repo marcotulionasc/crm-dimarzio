@@ -49,7 +49,6 @@ const CHART_TYPES = {
 export function LeadStats({ refreshTrigger }: LeadStatsProps) {
   const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 0)
   const tenantId = process.env.NEXT_PUBLIC_CRM_TENANT_ID || "6"
-  const product = process.env.NEXT_PUBLIC_CRM_DEFAULT_PRODUCT || "dimarzio-auto"
 
   useEffect(() => {
     const handleResize = () => {
@@ -72,7 +71,7 @@ export function LeadStats({ refreshTrigger }: LeadStatsProps) {
   const fetchLeads = async () => {
     setLoading(true)
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_CRM_API_BASE_URL}/data/${tenantId}/${product}`)
+      const response = await fetch(`${process.env.NEXT_PUBLIC_CRM_API_BASE_URL}/data/${tenantId}/dimarzioseguros`)
       const data = response.ok ? await response.json() : []
       setLeads(data)
     } catch (error) {

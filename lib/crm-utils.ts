@@ -3,7 +3,7 @@ import type { Lead } from '@/types/lead'
 
 // Função para verificar se um produto é da Dimarzio
 export const isDimarzioProduct = (productId: string): boolean => {
-  return productId?.startsWith('dimarzio-') || false
+  return productId === 'dimarzioseguros'
 }
 
 // Função para formatar nome do produto
@@ -20,15 +20,7 @@ export const formatProductName = (productId: string): string => {
     return 'Dimarzio Seguros'
   }
   
-  // Fallback para produtos não configurados mas válidos da Dimarzio
-  if (isDimarzioProduct(productId)) {
-    const name = productId.replace('dimarzio-', '').replace(/-/g, ' ')
-    return name.split(' ').map(word => 
-      word.charAt(0).toUpperCase() + word.slice(1)
-    ).join(' ')
-  }
-  
-  return productId || 'Produto não informado'
+  return 'Dimarzio Seguros'
 }
 
 // Função para extrair informações principais do lead
@@ -93,55 +85,45 @@ export const discoverAvailableProducts = async (): Promise<string[]> => {
   try {
     const config = getCrmConfig()
     const tenantId = config.TENANT_ID
-    const dimarzioProducts = Object.keys(config.PRODUCTS)
     
-    // Testar cada produto para ver quais têm dados
-    const promises = dimarzioProducts.map(async (productId) => {
-      try {
-        const response = await fetch(`${config.API_BASE_URL}/data/${tenantId}/${productId}`)
-        if (response.ok) {
-          const data = await response.json()
-          return data.length > 0 ? productId : null
-        }
-        return null
-      } catch {
-        return null
-      }
-    })
+    // Testar apenas o produto dimarzioseguros
+    const response = await fetch(`${config.API_BASE_URL}/data/${tenantId}/dimarzioseguros`)
+    if (response.ok) {
+      const data = await response.json()
+      return data.length > 0 ? ['dimarzioseguros'] : []
+    }
     
-    const results = await Promise.all(promises)
-    return results.filter(Boolean) as string[]
+    return []
   } catch (error) {
     console.error('Erro ao descobrir produtos:', error)
     return []
   }
 }
 
-// Função para buscar leads de múltiplos produtos
-export const fetchMultipleProducts = async (productIds: string[], tenantId: string): Promise<Lead[]> => {
+// Função para buscar leads (apenas dimarzioseguros agora)
+export const fetchDimarzioLeads = async (tenantId: string): Promise<Lead[]> => {
   try {
     const config = getCrmConfig()
     
-    const promises = productIds.map(productId =>
-      fetch(`${config.API_BASE_URL}/data/${tenantId}/${productId}`)
-        .then(res => res.ok ? res.json() : [])
-        .catch(() => [])
-    )
+    const response = await fetch(`${config.API_BASE_URL}/data/${tenantId}/dimarzioseguros`)
+    if (response.ok) {
+      const data = await response.json()
+      return data.map((lead: any) => ({ ...lead, product: 'dimarzioseguros' }))
+    }
     
-    const results = await Promise.all(promises)
-    return results.flat()
+    return []
   } catch (error) {
-    console.error('Erro ao buscar múltiplos produtos:', error)
+    console.error('Erro ao buscar leads:', error)
     return []
   }
 }
 
-// Função para buscar com cache inteligente
+// Função para buscar com cache inteligente (apenas dimarzioseguros)
 const productCache = new Map<string, { data: Lead[], timestamp: number }>()
 const CACHE_DURATION = 5 * 60 * 1000 // 5 minutos
 
-export const fetchWithCache = async (productId: string, tenantId: string): Promise<Lead[]> => {
-  const cacheKey = `${tenantId}-${productId}`
+export const fetchWithCache = async (tenantId: string): Promise<Lead[]> => {
+  const cacheKey = `${tenantId}-dimarzioseguros`
   const cached = productCache.get(cacheKey)
   
   // Verificar se o cache ainda é válido
@@ -151,18 +133,20 @@ export const fetchWithCache = async (productId: string, tenantId: string): Promi
   
   try {
     const config = getCrmConfig()
-    const response = await fetch(`${config.API_BASE_URL}/data/${tenantId}/${productId}`)
+    const response = await fetch(`${config.API_BASE_URL}/data/${tenantId}/dimarzioseguros`)
     
     if (response.ok) {
       const data = await response.json()
+      const leads = data.map((lead: any) => ({ ...lead, product: 'dimarzioseguros' }))
+      
       // Salvar no cache
-      productCache.set(cacheKey, { data, timestamp: Date.now() })
-      return data
+      productCache.set(cacheKey, { data: leads, timestamp: Date.now() })
+      return leads
     }
     
     return []
   } catch (error) {
-    console.error(`Erro ao buscar produto ${productId}:`, error)
+    console.error(`Erro ao buscar leads:`, error)
     return []
   }
 }

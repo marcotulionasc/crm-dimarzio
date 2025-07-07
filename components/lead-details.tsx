@@ -40,49 +40,21 @@ export function LeadDetails({ leadId }: LeadDetailsProps) {
   const fetchLead = async () => {
     setLoading(true)
     try {
-      // Lista de produtos da Dimarzio para buscar
-      const dimarzioProducts = [
-        "dimarzioseguros",
-        "dimarzio-auto",
-        "dimarzio-residencial", 
-        "dimarzio-vida",
-        "dimarzio-consorcio",
-        "dimarzio-fianca-locaticia",
-        "dimarzio-fiduciario",
-        "dimarzio-contato",
-        "dimarzio-portateis",
-        "dimarzio-saude",
-        "dimarzio-viagem",
-        "dimarzio-rural",
-        "dimarzio-empresarial",
-        "dimarzio-rc-profissional"
-      ]
-      
-      let foundLead: Metropole | null = null
-      
-      // Buscar o lead em todos os produtos da Dimarzio
-      for (const productId of dimarzioProducts) {
-        try {
-          const response = await fetch(`${process.env.NEXT_PUBLIC_CRM_API_BASE_URL}/data/${tenantId}/${productId}`)
-          if (response.ok) {
-            const data = await response.json()
-            const lead = data.find((l: Metropole) => l.id.toString() === leadId)
-            if (lead) {
-              foundLead = { ...lead, product: productId } // Garantir que o produto está definido
-              break
-            }
-          }
-        } catch (error) {
-          console.log(`Erro ao buscar em ${productId}:`, error)
-          // Continue tentando os outros produtos
-        }
+      // Buscar apenas no produto "dimarzioseguros"
+      const response = await fetch(`${process.env.NEXT_PUBLIC_CRM_API_BASE_URL}/data/${tenantId}/dimarzioseguros`)
+      if (!response.ok) {
+        throw new Error("Falha ao buscar dados")
       }
+      
+      const data = await response.json()
+      const foundLead = data.find((l: Metropole) => l.id.toString() === leadId)
       
       if (!foundLead) {
-        throw new Error("Lead não encontrado em nenhum produto")
+        throw new Error("Lead não encontrado")
       }
       
-      setLead(foundLead)
+      // Garantir que o produto está definido como "dimarzioseguros"
+      setLead({ ...foundLead, product: "dimarzioseguros" })
     } catch (error) {
       console.error("Erro ao buscar lead:", error)
       toast({

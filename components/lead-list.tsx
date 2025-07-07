@@ -34,7 +34,6 @@ export function LeadList({ onProductChange, onStatusUpdate }: LeadListProps) {
   const [metropoles, setMetropoles] = useState<Metropole[]>([])
   const [updatingId, setUpdatingId] = useState<number | null>(null)
   const tenantId = process.env.NEXT_PUBLIC_CRM_TENANT_ID || "6"
-  const [product, setProduct] = useState<string>("todos")
   const [searchTerm, setSearchTerm] = useState("")
   const { products } = useProductConfig()
 
@@ -45,47 +44,30 @@ export function LeadList({ onProductChange, onStatusUpdate }: LeadListProps) {
 
   useEffect(() => {
     fetchMetropoles()
-    if (onProductChange) {
-      onProductChange(product)
-    }
-  }, [product])
+  }, [])
 
   const fetchMetropoles = async () => {
     setLoading(true)
     try {
-      let allLeads: Metropole[] = []
-      
-      if (product === "todos") {
-        // Buscar todos os produtos da Dimarzio
-        const dimarzioProducts = products.map(p => p.id).filter(id => id.startsWith('dimarzio-'))
+      // Buscar apenas no produto "dimarzioseguros"
+      const response = await fetch(`${process.env.NEXT_PUBLIC_CRM_API_BASE_URL}/data/${tenantId}/dimarzioseguros`)
+      if (response.ok) {
+        const data = await response.json()
         
-        // Fazer chamadas paralelas para todos os produtos
-        const promises = dimarzioProducts.map(productId => 
-          fetch(`${process.env.NEXT_PUBLIC_CRM_API_BASE_URL}/data/${tenantId}/${productId}`)
-            .then(res => res.ok ? res.json() : [])
-            .catch(() => [])
-        )
+        // Ordenar os leads do mais recente para o mais antigo
+        const sortedData = data.sort((a: Metropole, b: Metropole) => {
+          const dateA = new Date(a.createdAt).getTime()
+          const dateB = new Date(b.createdAt).getTime()
+          return dateB - dateA // Ordem decrescente (mais recente primeiro)
+        })
         
-        const results = await Promise.all(promises)
-        allLeads = results.flat()
+        setMetropoles(sortedData)
       } else {
-        // Buscar apenas o produto selecionado
-        const response = await fetch(`${process.env.NEXT_PUBLIC_CRM_API_BASE_URL}/data/${tenantId}/${product}`)
-        if (response.ok) {
-          allLeads = await response.json()
-        }
+        setMetropoles([])
       }
-      
-      // Ordenar os leads do mais recente para o mais antigo
-      const sortedData = allLeads.sort((a: Metropole, b: Metropole) => {
-        const dateA = new Date(a.createdAt).getTime()
-        const dateB = new Date(b.createdAt).getTime()
-        return dateB - dateA // Ordem decrescente (mais recente primeiro)
-      })
-      
-      setMetropoles(sortedData)
     } catch (error) {
       console.error("Erro ao buscar dados:", error)
+      setMetropoles([])
     } finally {
       setLoading(false)
     }
@@ -139,11 +121,8 @@ export function LeadList({ onProductChange, onStatusUpdate }: LeadListProps) {
     }
   }
 
-  // Filtrar leads por termo de busca e garantir que só mostra produtos da Dimarzio
+  // Filtrar leads por termo de busca (apenas produto dimarzioseguros)
   const filteredMetropoles = metropoles.filter((lead) => {
-    // Primeiro, verificar se é um produto da Dimarzio
-    const isDimarzioProduct = lead.product?.startsWith('dimarzio-')
-    
     // Filtro de busca
     const matchesSearch = 
       lead.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -156,7 +135,7 @@ export function LeadList({ onProductChange, onStatusUpdate }: LeadListProps) {
       lead.interessePrincipal?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       lead.product?.toLowerCase().includes(searchTerm.toLowerCase())
 
-    return isDimarzioProduct && matchesSearch
+    return matchesSearch
   }).sort((a, b) => {
     // Garantir ordenação do mais recente para o mais antigo nos dados filtrados também
     const dateA = new Date(a.createdAt).getTime()
@@ -198,20 +177,11 @@ export function LeadList({ onProductChange, onStatusUpdate }: LeadListProps) {
 
   // Função para formatar o nome do produto
   const formatProductName = (productId: string) => {
-    const product = products.find(p => p.id === productId)
-    if (product) {
-      return product.name
+    // Como só temos o produto "dimarzioseguros" agora
+    if (productId === "dimarzioseguros") {
+      return "Dimarzio Seguros"
     }
-    
-    // Fallback para mostrar o nome formatado mesmo se não estiver nos produtos configurados
-    if (productId?.startsWith('dimarzio-')) {
-      const name = productId.replace('dimarzio-', '').replace('-', ' ')
-      return name.split(' ').map(word => 
-        word.charAt(0).toUpperCase() + word.slice(1)
-      ).join(' ')
-    }
-    
-    return productId || 'Produto não informado'
+    return "Dimarzio Seguros"
   }
 
   // Função para obter informações relevantes do lead
@@ -298,30 +268,13 @@ export function LeadList({ onProductChange, onStatusUpdate }: LeadListProps) {
 
         <CardContent className="p-4 sm:p-6 space-y-4">
           {/* Filtros e Busca - Responsivo */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-            <div className="space-y-1">
-              <label className="text-sm font-medium text-gray-700">Produto</label>
-              <Select value={product} onValueChange={setProduct}>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Selecione o produto" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="todos">🎯 Todos os Produtos</SelectItem>
-                  {products.map((prod) => (
-                    <SelectItem key={prod.id} value={prod.id}>
-                      {prod.name || prod.id}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-1 sm:col-span-1 lg:col-span-2">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4">
+            <div className="lg:col-span-3 space-y-1">
               <label className="text-sm font-medium text-gray-700">Buscar</label>
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <Input
-                  placeholder="Buscar por nome, email, telefone, produto ou interesse..."
+                  placeholder="Buscar por nome, email, telefone ou interesse..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-10"
