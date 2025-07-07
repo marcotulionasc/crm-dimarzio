@@ -10,6 +10,7 @@ import { toast } from "@/components/ui/use-toast"
 import type { Metropole } from "@/types/lead"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { formatProductName } from "@/lib/crm-utils"
 
 const LEAD_STATUS = [
   { value: "NOVO", label: "Novo", color: "bg-blue-500" },
@@ -31,7 +32,6 @@ export function LeadDetails({ leadId }: LeadDetailsProps) {
   const [lead, setLead] = useState<Metropole | null>(null)
   const [updatingStatus, setUpdatingStatus] = useState(false)
   const tenantId = process.env.NEXT_PUBLIC_CRM_TENANT_ID || "6"
-  const product = process.env.NEXT_PUBLIC_CRM_DEFAULT_PRODUCT || "dimarzio-auto"
 
   useEffect(() => {
     fetchLead()
@@ -40,16 +40,46 @@ export function LeadDetails({ leadId }: LeadDetailsProps) {
   const fetchLead = async () => {
     setLoading(true)
     try {
-      // Buscar todos os leads e filtrar pelo ID (já que a API não tem endpoint individual)
-      const response = await fetch(`${process.env.NEXT_PUBLIC_CRM_API_BASE_URL}/data/${tenantId}/${product}`)
-      if (!response.ok) {
-        throw new Error("Falha ao buscar dados")
+      // Lista de produtos da Dimarzio para buscar
+      const dimarzioProducts = [
+        "dimarzioseguros",
+        "dimarzio-auto",
+        "dimarzio-residencial", 
+        "dimarzio-vida",
+        "dimarzio-consorcio",
+        "dimarzio-fianca-locaticia",
+        "dimarzio-fiduciario",
+        "dimarzio-contato",
+        "dimarzio-portateis",
+        "dimarzio-saude",
+        "dimarzio-viagem",
+        "dimarzio-rural",
+        "dimarzio-empresarial",
+        "dimarzio-rc-profissional"
+      ]
+      
+      let foundLead: Metropole | null = null
+      
+      // Buscar o lead em todos os produtos da Dimarzio
+      for (const productId of dimarzioProducts) {
+        try {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_CRM_API_BASE_URL}/data/${tenantId}/${productId}`)
+          if (response.ok) {
+            const data = await response.json()
+            const lead = data.find((l: Metropole) => l.id.toString() === leadId)
+            if (lead) {
+              foundLead = { ...lead, product: productId } // Garantir que o produto está definido
+              break
+            }
+          }
+        } catch (error) {
+          console.log(`Erro ao buscar em ${productId}:`, error)
+          // Continue tentando os outros produtos
+        }
       }
-      const data = await response.json()
-      const foundLead = data.find((l: Metropole) => l.id.toString() === leadId)
       
       if (!foundLead) {
-        throw new Error("Lead não encontrado")
+        throw new Error("Lead não encontrado em nenhum produto")
       }
       
       setLead(foundLead)
@@ -292,7 +322,7 @@ export function LeadDetails({ leadId }: LeadDetailsProps) {
               <label className="text-sm font-medium text-gray-600">Produto</label>
               <div className="flex items-center gap-2 mt-1">
                 <Building className="h-4 w-4 text-gray-400" />
-                <span className="text-gray-900">{lead.product || process.env.NEXT_PUBLIC_CRM_COMPANY_NAME || 'Dimarzio Seguros'}</span>
+                <span className="text-gray-900">{formatProductName(lead.product)}</span>
               </div>
             </div>
           </CardContent>

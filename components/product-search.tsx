@@ -19,15 +19,18 @@ interface ProductSearchProps {
 export function ProductSearch({ 
   selectedProducts, 
   onProductsChange, 
-  placeholder = "Buscar produtos..." 
+  placeholder = "Buscar dimarzioseguros..." 
 }: ProductSearchProps) {
   const [searchTerm, setSearchTerm] = useState("")
   const [showDropdown, setShowDropdown] = useState(false)
   const [availableProducts, setAvailableProducts] = useState<string[]>([])
   const { products } = useProductConfig()
 
-  // Filtrar produtos baseado na busca
-  const filteredProducts = products.filter(product => {
+  // Filtrar apenas o produto "dimarzioseguros"
+  const dimarziosegurosProducts = products.filter(product => product.id === "dimarzioseguros")
+
+  // Filtrar produtos baseado na busca (apenas dimarzioseguros)
+  const filteredProducts = dimarziosegurosProducts.filter(product => {
     const name = formatProductName(product.id).toLowerCase()
     const id = product.id.toLowerCase()
     const term = searchTerm.toLowerCase()
@@ -49,9 +52,9 @@ export function ProductSearch({
     onProductsChange(selectedProducts.filter(id => id !== productId))
   }
 
-  // Selecionar todos
+  // Selecionar todos (apenas dimarzioseguros)
   const selectAll = () => {
-    onProductsChange(products.map(p => p.id))
+    onProductsChange(dimarziosegurosProducts.map(p => p.id))
   }
 
   // Limpar seleção
@@ -101,7 +104,7 @@ export function ProductSearch({
                 onClick={selectAll}
                 className="text-xs"
               >
-                Selecionar Todos
+                Selecionar Dimarzio Seguros
               </Button>
               <Button
                 variant="ghost"
@@ -138,7 +141,7 @@ export function ProductSearch({
                 ))
               ) : (
                 <div className="text-center py-4 text-gray-500 text-sm">
-                  Nenhum produto encontrado
+                  Produto dimarzioseguros não encontrado
                 </div>
               )}
             </div>
@@ -150,7 +153,7 @@ export function ProductSearch({
       <div className="text-xs text-gray-500 flex items-center gap-2">
         <Filter className="h-3 w-3" />
         {selectedProducts.length === 0 && "Nenhum produto selecionado"}
-        {selectedProducts.length === 1 && "1 produto selecionado"}
+        {selectedProducts.length === 1 && "Dimarzio Seguros selecionado"}
         {selectedProducts.length > 1 && `${selectedProducts.length} produtos selecionados`}
       </div>
     </div>

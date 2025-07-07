@@ -13,6 +13,7 @@ export interface Product {
 
 // Produtos da Dimarzio Seguros
 const defaultProducts: Product[] = [
+  { id: "dimarzioseguros", name: "Dimarzio Seguros", active: true },
   { id: "dimarzio-consorcio", name: "Consórcio", active: true },
   { id: "dimarzio-residencial", name: "Residencial", active: true },
   { id: "dimarzio-fianca-locaticia", name: "Fiança Locatícia", active: true },

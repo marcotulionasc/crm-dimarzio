@@ -9,10 +9,15 @@ export const isDimarzioProduct = (productId: string): boolean => {
 // Função para formatar nome do produto
 export const formatProductName = (productId: string): string => {
   const config = getCrmConfig()
-  const product = config.PRODUCTS.find(p => p.id === productId)
+  const product = config.PRODUCTS[productId as keyof typeof config.PRODUCTS]
   
   if (product) {
     return product.name
+  }
+  
+  // Tratamento especial para o produto dimarzioseguros
+  if (productId === 'dimarzioseguros') {
+    return 'Dimarzio Seguros'
   }
   
   // Fallback para produtos não configurados mas válidos da Dimarzio
@@ -88,7 +93,7 @@ export const discoverAvailableProducts = async (): Promise<string[]> => {
   try {
     const config = getCrmConfig()
     const tenantId = config.TENANT_ID
-    const dimarzioProducts = config.PRODUCTS.map(p => p.id)
+    const dimarzioProducts = Object.keys(config.PRODUCTS)
     
     // Testar cada produto para ver quais têm dados
     const promises = dimarzioProducts.map(async (productId) => {

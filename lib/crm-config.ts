@@ -9,6 +9,12 @@ export const CRM_CONFIG = {
   
   // Produtos disponíveis
   PRODUCTS: {
+    'dimarzioseguros': {
+      name: 'Dimarzio Seguros',
+      description: 'Produto principal da Dimarzio Seguros',
+      color: '#2E0854',
+      icon: 'shield'
+    },
     'dimarzio-auto': {
       name: 'Seguro Auto',
       description: 'Seguro para veículos',
@@ -30,7 +36,7 @@ export const CRM_CONFIG = {
   },
   
   // Produto padrão
-  DEFAULT_PRODUCT: process.env.NEXT_PUBLIC_CRM_DEFAULT_PRODUCT || 'dimarzio-auto',
+  DEFAULT_PRODUCT: process.env.NEXT_PUBLIC_CRM_DEFAULT_PRODUCT || 'dimarzioseguros',
   
   // Templates
   WHATSAPP_TEMPLATE: process.env.NEXT_PUBLIC_CRM_WHATSAPP_TEMPLATE || 'Olá {nome}, estamos entrando em contato sobre seu interesse em nossos produtos de seguros.',
