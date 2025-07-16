@@ -57,7 +57,7 @@ export function LeadList({ onProductChange, onStatusUpdate }: LeadListProps) {
       
       if (product === "todos") {
         // Buscar todos os produtos da Dimarzio
-        const dimarzioProducts = products.map(p => p.id).filter(id => id.startsWith('dimarzio-'))
+        const dimarzioProducts = products.map(p => p.id).filter(id => id === 'dimarzioseguros' || id.startsWith('dimarzio-'))
         
         // Fazer chamadas paralelas para todos os produtos
         const promises = dimarzioProducts.map(productId => 
@@ -202,6 +202,10 @@ export function LeadList({ onProductChange, onStatusUpdate }: LeadListProps) {
     }
     
     // Fallback para mostrar o nome formatado mesmo se não estiver nos produtos configurados
+    if (productId === 'dimarzioseguros') {
+      return 'Dimarzio Seguros'
+    }
+    
     if (productId?.startsWith('dimarzio-')) {
       const name = productId.replace('dimarzio-', '').replace('-', ' ')
       return name.split(' ').map(word => 

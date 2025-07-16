@@ -87,7 +87,9 @@ export function DashboardStats({ refreshTrigger }: DashboardStatsProps) {
     const product = lead.product || "Não especificado"
     // Converter o ID do produto para nome amigável
     let productName = product
-    if (product.startsWith('dimarzio-')) {
+    if (product === 'dimarzioseguros') {
+      productName = 'Dimarzio Seguros'
+    } else if (product.startsWith('dimarzio-')) {
       productName = product
         .replace('dimarzio-', '')
         .replace('-', ' ')
