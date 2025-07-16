@@ -106,7 +106,7 @@ export function LeadStats({ refreshTrigger }: LeadStatsProps) {
   const getCityStats = () => {
     const cityCounts: Record<string, number> = {}
     leads.forEach((lead) => {
-      const city = lead.field01 || "Não especificado"
+      const city = lead.field18 || "Não especificado"
       cityCounts[city] = (cityCounts[city] || 0) + 1
     })
 

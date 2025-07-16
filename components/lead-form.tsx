@@ -24,8 +24,6 @@ export function LeadForm() {
     cellPhone: "",
     product: process.env.NEXT_PUBLIC_CRM_DEFAULT_PRODUCT || "dimarzio-auto",
     interessePrincipal: "seguros",
-    field01: "", // Observações gerais
-    field02: "", // Como nos conheceu
     field03: "", // Status (será definido automaticamente como NOVO)
     field04: "", // Campo extra 1
     field05: "", // Campo extra 2
@@ -58,8 +56,6 @@ export function LeadForm() {
       cellPhone: "",
       product: process.env.NEXT_PUBLIC_CRM_DEFAULT_PRODUCT || "dimarzio-auto",
       interessePrincipal: "seguros",
-      field01: "",
-      field02: "",
       field03: "",
       field04: "",
       field05: "",
@@ -171,36 +167,9 @@ export function LeadForm() {
             </div>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="field02">Como nos conheceu?</Label>
-            <Select value={formData.field02} onValueChange={(value) => handleSelectChange("field02", value)}>
-              <SelectTrigger id="field02">
-                <SelectValue placeholder="Selecione uma opção" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Indicação">Indicação</SelectItem>
-                <SelectItem value="Google">Google</SelectItem>
-                <SelectItem value="Facebook">Facebook</SelectItem>
-                <SelectItem value="Instagram">Instagram</SelectItem>
-                <SelectItem value="LinkedIn">LinkedIn</SelectItem>
-                <SelectItem value="WhatsApp">WhatsApp</SelectItem>
-                <SelectItem value="Site">Site</SelectItem>
-                <SelectItem value="Outros">Outros</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="field01">Observações</Label>
-            <Textarea
-              id="field01"
-              name="field01"
-              value={formData.field01}
-              onChange={handleChange}
-              placeholder="Informações adicionais sobre o lead..."
-              rows={3}
-            />
-          </div>
+
+
         </CardContent>
         <CardFooter>
           <Button type="submit" disabled={loading} className="w-full">

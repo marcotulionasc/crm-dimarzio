@@ -1,4 +1,4 @@
-// File: /Users/mac/Desktop/projects/dashboards/dimarzio-crm/app/dashboard/page.tsx
+// File: /Users/mac/Desktop/marco/projects/dashboards/dimarzio-crm/app/dashboard/page.tsx
 import * as entry from '../../../../app/dashboard/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

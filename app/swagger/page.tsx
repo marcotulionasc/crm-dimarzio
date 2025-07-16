@@ -51,8 +51,7 @@ export default function SwaggerPage() {
     email: "string - Email do lead", 
     cellPhone: "string - Telefone celular",
     createdAt: "string - Data de criação (ISO)",
-    field01: "string - Campo customizado 1",
-    field02: "string - Campo customizado 2", 
+ 
     field03: "string - Status do lead",
     field04: "string - Campo customizado 4",
     field05: "string - Campo customizado 5",
@@ -249,7 +248,7 @@ export default function SwaggerPage() {
                         Um lead é considerado do Quiz se qualquer um destes campos for "yes", "no", "live" ou "invest":
                       </p>
                       <div className="grid grid-cols-2 gap-2 text-sm font-mono">
-                        <span>field01, field02, field04, field05</span>
+                        <span>field04, field05</span>
                         <span>field06 (live/invest)</span>
                       </div>
                       
@@ -327,7 +326,7 @@ export default function SwaggerPage() {
                           <li>• Nomes dos produtos</li>
                           <li>• Status de leads customizados</li>
                           <li>• Template do WhatsApp</li>
-                          <li>• Campos customizados (field01-06)</li>
+                          <li>• Campos customizados (field04-06)</li>
                         </ul>
                       </div>
                       
@@ -536,7 +535,7 @@ PUT: {baseUrl}/v1/update/{leadId}
 - email: string
 - cellPhone: string
 - createdAt: string (ISO)
-- field01-06: string (campos customizados)
+                    - field04-06: string (campos customizados)
 - interessePrincipal: string
 - product: string
 
@@ -561,7 +560,7 @@ PUT: {baseUrl}/v1/update/{leadId}
 - ✅ Loading states e tratamento de erro
 
 ## LÓGICA DE ORIGEM DOS LEADS
-Quiz: field01-05 = "yes/no" OU field06 = "live/invest"
+                    Quiz: field04-05 = "yes/no" OU field06 = "live/invest"
 Premium: todos os outros
 
 ## RESPONSIVIDADE

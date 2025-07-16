@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Loader2, Phone, ArrowLeft, Mail, User, MessageCircle, Calendar, MapPin, Home, Building } from "lucide-react"
+import { Loader2, Phone, ArrowLeft, Mail, User, MessageCircle, Calendar, Home, Building } from "lucide-react"
 import { toast } from "@/components/ui/use-toast"
 import type { Metropole } from "@/types/lead"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -311,28 +311,9 @@ export function LeadDetails({ leadId }: LeadDetailsProps) {
           </CardDescription>
         </CardHeader>
         <CardContent className="p-6 space-y-4">
-          <div className="grid gap-4 md:grid-cols-2">
-            <div>
-              <label className="text-sm font-medium text-gray-600">Localização</label>
-              <div className="flex items-center gap-2 mt-1">
-                <MapPin className="h-4 w-4 text-gray-400" />
-                <span className="text-gray-900">{lead.field01 || "Não informado"}</span>
-              </div>
-            </div>
-            
-            <div>
-              <label className="text-sm font-medium text-gray-600">Interesse Principal</label>
-              <p className="text-gray-900 mt-1">{lead.interessePrincipal || "Não especificado"}</p>
-            </div>
-          </div>
-          
           <div>
-            <label className="text-sm font-medium text-gray-600">Descrição do Projeto</label>
-            <div className="mt-1 p-3 bg-gray-50 rounded-lg">
-              <p className="text-gray-900">
-                {lead.field02 || "Nenhuma descrição fornecida"}
-              </p>
-            </div>
+            <label className="text-sm font-medium text-gray-600">Interesse Principal</label>
+            <p className="text-gray-900 mt-1">{lead.interessePrincipal || "Não especificado"}</p>
           </div>
         </CardContent>
       </Card>

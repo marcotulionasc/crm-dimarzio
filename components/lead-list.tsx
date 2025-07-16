@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
-import { Loader2, Phone, Eye, ChevronLeft, ChevronRight, Search, Filter, Plus, HelpCircle, Calendar, MapPin, Home } from "lucide-react"
+import { Loader2, Phone, Eye, ChevronLeft, ChevronRight, Search, Filter, Plus, HelpCircle, Calendar, Home } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { toast } from "@/components/ui/use-toast"
 import type { Metropole } from "@/types/lead"
@@ -149,8 +149,6 @@ export function LeadList({ onProductChange, onStatusUpdate }: LeadListProps) {
       lead.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       lead.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       lead.cellPhone?.includes(searchTerm) ||
-      lead.field01?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      lead.field02?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       lead.field18?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       lead.field19?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       lead.interessePrincipal?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -218,7 +216,7 @@ export function LeadList({ onProductChange, onStatusUpdate }: LeadListProps) {
   const getLeadInfo = (lead: Metropole) => {
     return {
       primaryInfo: lead.field19 || lead.interessePrincipal || 'Interesse não informado',
-      secondaryInfo: lead.field18 || lead.field01 || lead.field02 || 'Sem observações',
+      secondaryInfo: lead.field18 || 'Sem observações',
       productName: formatProductName(lead.product)
     }
   }
@@ -372,8 +370,6 @@ export function LeadList({ onProductChange, onStatusUpdate }: LeadListProps) {
                         <TableHead className="font-semibold w-[200px]">Cliente</TableHead>
                         <TableHead className="font-semibold w-[180px]">Data</TableHead>
                         <TableHead className="font-semibold w-[160px]">Contato</TableHead>
-                        <TableHead className="font-semibold w-[140px]">Localização</TableHead>
-                        <TableHead className="font-semibold w-[180px]">Projeto</TableHead>
                         <TableHead className="font-semibold w-[120px]">Interesse</TableHead>
                         <TableHead className="font-semibold w-[140px]">Status</TableHead>
                         <TableHead className="font-semibold w-[120px] text-center">Ações</TableHead>
@@ -400,17 +396,6 @@ export function LeadList({ onProductChange, onStatusUpdate }: LeadListProps) {
                             <TableCell>
                               <div className="text-sm">
                                 <div className="font-medium text-xs">{lead.cellPhone || "Não informado"}</div>
-                              </div>
-                            </TableCell>
-                            <TableCell>
-                              <div className="flex items-center gap-1 text-xs text-gray-600">
-                                <MapPin className="h-3 w-3 text-gray-400" />
-                                <span className="line-clamp-1">{lead.field01 || "N/A"}</span>
-                              </div>
-                            </TableCell>
-                            <TableCell>
-                              <div className="text-xs text-gray-600 line-clamp-2">
-                                {lead.field02 || "Não especificado"}
                               </div>
                             </TableCell>
                             <TableCell>
@@ -492,16 +477,6 @@ export function LeadList({ onProductChange, onStatusUpdate }: LeadListProps) {
                                 <span className="text-gray-600">📱 </span>
                                 <span>{lead.cellPhone || "Não informado"}</span>
                               </div>
-                              <div>
-                                <span className="text-gray-600">📍 </span>
-                                <span>{lead.field01 || "N/A"}</span>
-                              </div>
-                              {lead.field02 && (
-                                <div className="sm:col-span-2">
-                                  <span className="text-gray-600">🏠 </span>
-                                  <span>{lead.field02}</span>
-                                </div>
-                              )}
                               {lead.interessePrincipal && (
                                 <div className="sm:col-span-2">
                                   <span className="text-gray-600">💼 </span>

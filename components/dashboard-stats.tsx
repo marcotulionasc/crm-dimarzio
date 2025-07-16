@@ -24,8 +24,6 @@ export function DashboardStats({ refreshTrigger }: DashboardStatsProps) {
   const fetchLeads = async () => {
     setLoading(true)
     try {
-      console.log("🔍 DashboardStats: Iniciando busca de leads...")
-      
       // Buscar dados de todos os produtos
       const productIds = [
         "dimarzio-auto",
@@ -44,54 +42,31 @@ export function DashboardStats({ refreshTrigger }: DashboardStatsProps) {
       ]
 
       let allLeads: Metropole[] = []
-      let successCount = 0
-      let errorCount = 0
 
       for (const productId of productIds) {
         try {
           const url = `${process.env.NEXT_PUBLIC_CRM_API_BASE_URL}/data/${tenantId}/${productId}`
-          console.log(`📡 Buscando: ${productId}`)
           
           const response = await fetch(url)
           if (response.ok) {
             const data = await response.json()
             if (Array.isArray(data) && data.length > 0) {
-              console.log(`✅ ${productId}: ${data.length} leads encontrados`)
               // Adicionar informação do produto aos leads
               const leadsWithProduct = data.map(lead => ({
                 ...lead,
                 product: productId
               }))
               allLeads = [...allLeads, ...leadsWithProduct]
-              successCount++
-            } else {
-              console.log(`⚪ ${productId}: sem leads`)
             }
-          } else {
-            console.log(`❌ ${productId}: erro HTTP ${response.status}`)
-            errorCount++
           }
         } catch (error) {
-          console.error(`💥 Erro ao buscar ${productId}:`, error)
-          errorCount++
+          console.error(`Erro ao buscar ${productId}:`, error)
         }
       }
-
-      console.log(`📊 Resultado final:`)
-      console.log(`   Total de leads: ${allLeads.length}`)
-      console.log(`   Produtos com sucesso: ${successCount}`)
-      console.log(`   Produtos com erro: ${errorCount}`)
-      console.log(`   Leads por status:`, {
-        total: allLeads.length,
-        novo: allLeads.filter(l => !l.field03 || l.field03 === "NOVO").length,
-        qualificado: allLeads.filter(l => l.field03 === "QUALIFICADO" || l.field03 === "QUALIFICADO_OP").length,
-        proposta: allLeads.filter(l => l.field03 === "PROPOSTA").length,
-        fechado: allLeads.filter(l => l.field03 === "FECHADO").length
-      })
       
       setLeads(allLeads)
     } catch (error) {
-      console.error("💥 Erro geral ao buscar dados:", error)
+      console.error("Erro geral ao buscar dados:", error)
       setLeads([])
     } finally {
       setLoading(false)
@@ -123,9 +98,9 @@ export function DashboardStats({ refreshTrigger }: DashboardStatsProps) {
     return acc
   }, {} as Record<string, number>)
 
-  // Leads por cidade (field01)
+  // Leads por cidade (field02)
   const leadsByCity = leads.reduce((acc, lead) => {
-    const city = lead.field01 || "Não especificado"
+    const city = lead.field18 || "Não especificado"
     acc[city] = (acc[city] || 0) + 1
     return acc
   }, {} as Record<string, number>)
@@ -159,24 +134,6 @@ export function DashboardStats({ refreshTrigger }: DashboardStatsProps) {
 
   return (
     <div className="space-y-6">
-      {/* Debug temporário */}
-      <div className="bg-yellow-50 border border-yellow-200 rounded p-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm font-medium text-yellow-800">Debug - Total de leads: {totalLeads}</p>
-            <p className="text-xs text-yellow-600">
-              Novos: {newLeads} | Qualificados: {qualifiedLeads} | Propostas: {proposalLeads} | Fechados: {closedLeads}
-            </p>
-          </div>
-          <button 
-            onClick={fetchLeads}
-            className="px-3 py-1 bg-yellow-200 text-yellow-800 rounded text-sm hover:bg-yellow-300"
-          >
-            🔄 Recarregar
-          </button>
-        </div>
-      </div>
-
       {/* Cards principais de estatísticas */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card className="border-l-4 border-l-blue-500">
@@ -329,7 +286,7 @@ export function DashboardStats({ refreshTrigger }: DashboardStatsProps) {
           <CardHeader>
             <CardTitle className="text-lg flex items-center gap-2">
               <MapPin className="h-5 w-5" />
-              Leads por Cidade
+              Leads
             </CardTitle>
             <CardDescription>
               Distribuição geográfica dos leads
