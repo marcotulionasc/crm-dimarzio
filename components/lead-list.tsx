@@ -57,7 +57,7 @@ export function LeadList({ onProductChange, onStatusUpdate }: LeadListProps) {
       
       if (product === "todos") {
         // Buscar todos os produtos da Dimarzio
-        const dimarzioProducts = products.map(p => p.id).filter(id => id === 'dimarzioseguros' || id.startsWith('dimarzio-'))
+        const dimarzioProducts = products.map(p => p.id).filter(id => id === 'dimarzioseguros')
         
         // Fazer chamadas paralelas para todos os produtos
         const promises = dimarzioProducts.map(productId => 
@@ -142,7 +142,7 @@ export function LeadList({ onProductChange, onStatusUpdate }: LeadListProps) {
   // Filtrar leads por termo de busca e garantir que só mostra produtos da Dimarzio
   const filteredMetropoles = metropoles.filter((lead) => {
     // Primeiro, verificar se é um produto da Dimarzio
-    const isDimarzioProduct = lead.product === 'dimarzioseguros' || lead.product?.startsWith('dimarzio-')
+    const isDimarzioProduct = lead.product === 'dimarzioseguros'
     
     // Filtro de busca
     const matchesSearch = 
@@ -204,13 +204,6 @@ export function LeadList({ onProductChange, onStatusUpdate }: LeadListProps) {
     // Fallback para mostrar o nome formatado mesmo se não estiver nos produtos configurados
     if (productId === 'dimarzioseguros') {
       return 'Dimarzio Seguros'
-    }
-    
-    if (productId?.startsWith('dimarzio-')) {
-      const name = productId.replace('dimarzio-', '').replace('-', ' ')
-      return name.split(' ').map(word => 
-        word.charAt(0).toUpperCase() + word.slice(1)
-      ).join(' ')
     }
     
     return productId || 'Produto não informado'

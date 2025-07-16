@@ -14,19 +14,6 @@ export interface Product {
 // Produtos da Dimarzio Seguros
 const defaultProducts: Product[] = [
   { id: "dimarzioseguros", name: "Dimarzio Seguros", active: true },
-  { id: "dimarzio-consorcio", name: "Consórcio", active: true },
-  { id: "dimarzio-residencial", name: "Residencial", active: true },
-  { id: "dimarzio-fianca-locaticia", name: "Fiança Locatícia", active: true },
-  { id: "dimarzio-auto", name: "Auto", active: true },
-  { id: "dimarzio-fiduciario", name: "Fiduciário", active: true },
-  { id: "dimarzio-contato", name: "Contato", active: true },
-  { id: "dimarzio-vida", name: "Vida", active: true },
-  { id: "dimarzio-portateis", name: "Portáteis", active: true },
-  { id: "dimarzio-saude", name: "Saúde", active: true },
-  { id: "dimarzio-viagem", name: "Viagem", active: true },
-  { id: "dimarzio-rural", name: "Rural", active: true },
-  { id: "dimarzio-empresarial", name: "Empresarial", active: true },
-  { id: "dimarzio-rc-profissional", name: "RC Profissional", active: true },
 ]
 
 // Contexto para compartilhar a configuração de produtos

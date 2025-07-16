@@ -26,20 +26,7 @@ export function DashboardStats({ refreshTrigger }: DashboardStatsProps) {
     try {
       // Buscar dados de todos os produtos
       const productIds = [
-        "dimarzioseguros",
-        "dimarzio-auto",
-        "dimarzio-residencial", 
-        "dimarzio-vida",
-        "dimarzio-consorcio",
-        "dimarzio-fianca-locaticia",
-        "dimarzio-fiduciario",
-        "dimarzio-contato",
-        "dimarzio-portateis",
-        "dimarzio-saude",
-        "dimarzio-viagem",
-        "dimarzio-rural",
-        "dimarzio-empresarial",
-        "dimarzio-rc-profissional"
+        "dimarzioseguros"
       ]
 
       let allLeads: Metropole[] = []
@@ -89,13 +76,6 @@ export function DashboardStats({ refreshTrigger }: DashboardStatsProps) {
     let productName = product
     if (product === 'dimarzioseguros') {
       productName = 'Dimarzio Seguros'
-    } else if (product.startsWith('dimarzio-')) {
-      productName = product
-        .replace('dimarzio-', '')
-        .replace('-', ' ')
-        .split(' ')
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(' ')
     }
     acc[productName] = (acc[productName] || 0) + 1
     return acc
