@@ -26,6 +26,7 @@ export function DashboardStats({ refreshTrigger }: DashboardStatsProps) {
     try {
       // Buscar dados de todos os produtos
       const productIds = [
+        "dimarzioseguros",
         "dimarzio-auto",
         "dimarzio-residencial", 
         "dimarzio-vida",

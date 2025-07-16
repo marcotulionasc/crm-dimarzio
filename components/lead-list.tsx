@@ -142,7 +142,7 @@ export function LeadList({ onProductChange, onStatusUpdate }: LeadListProps) {
   // Filtrar leads por termo de busca e garantir que só mostra produtos da Dimarzio
   const filteredMetropoles = metropoles.filter((lead) => {
     // Primeiro, verificar se é um produto da Dimarzio
-    const isDimarzioProduct = lead.product?.startsWith('dimarzio-')
+    const isDimarzioProduct = lead.product === 'dimarzioseguros' || lead.product?.startsWith('dimarzio-')
     
     // Filtro de busca
     const matchesSearch = 
